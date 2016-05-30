@@ -107,7 +107,8 @@ function digits($base) {
 //-----------------------------------------------------------------------------
 
 function clipperz_hash($value) {
-	return hash("sha256", hash("sha256", $value, true));
+	//return hash("sha256", hash("sha256", $value, true));
+	return hash("sha256", $value, false);
 }
 
 //-----------------------------------------------------------------------------
@@ -251,6 +252,8 @@ error_log("registration");
 error_log("handshake");
 			$srp_g = "2";
 			$srp_n = base2dec("115b8b692e0e045692cf280b436735c77a5a9e8a9e7ed56c965f87db5b2a2ece3", 16);
+			// Define k:  k = H(N, g) in SRP-6a
+			$srp_k = base2dec(clipperz_hash($srp_n . $srp_g), 16);
 
 			$message = $parameters["message"];
 
@@ -287,9 +290,12 @@ error_log("handshake");
 					$_SESSION["v"] = "112233445566778899aabbccddeeff00112233445566778899aabbccddeeff00";
 				}
 
-				$_SESSION["b"] = clipperz_randomSeed();
+// This should now work with a random seed. Need to check.
+//				$_SESSION["b"] = clipperz_randomSeed();
 //				$_SESSION["b"] = "5761e6c84d22ea3c5649de01702d60f674ccfe79238540eb34c61cd020230c53";
-				$_SESSION["B"] = dec2base(bcadd(base2dec($_SESSION["v"], 16), bcpowmod($srp_g, base2dec($_SESSION["b"], 16), $srp_n)), 16);
+				$_SESSION["b"] = "23309839184091712110293815740584558132927982490099443826709662564655631314481";
+
+				$_SESSION["B"] = dec2base(bcmod( bcadd( bcmod( bcmul( $srp_k,  base2dec($_SESSION["v"], 16)), $srp_n), bcpowmod( $srp_g, $_SESSION["b"], $srp_n) ), $srp_n), 16);
 
 				$result["s"] = $_SESSION["s"];
 				$result["B"] = $_SESSION["B"];
@@ -297,11 +303,13 @@ error_log("handshake");
 			//=============================================================
 			} else if ($message == "credentialCheck") {
 error_log("credentialCheck");
-				$u = clipperz_hash(base2dec($_SESSION["B"],16));
 				$A = base2dec($_SESSION["A"], 16);
-				$S = bcpowmod(bcmul($A, bcpowmod(base2dec($_SESSION["v"], 16), base2dec($u, 16), $srp_n)), base2dec($_SESSION["b"], 16), $srp_n);
+				// u = H(A, B)
+				$u = base2dec(clipperz_hash($A . base2dec($_SESSION["B"],16)), 16);
+				// S = (Av^u) ^ b
+				$S = bcpowmod( bcmul( $A, bcpowmod( base2dec($_SESSION["v"], 16), $u, $srp_n) ), $_SESSION["b"], $srp_n );
 				$K = clipperz_hash($S);
-				$M1 = clipperz_hash($A.base2dec($_SESSION["B"],16).$K);
+				$M1 = clipperz_hash("597626870978286801440197562148588907434001483655788865609375806439877501869636875571920406529" . clipperz_hash($_SESSION['C']) .  base2dec($_SESSION["s"],16) .  base2dec($_SESSION['A'],16) .  base2dec($_SESSION['B'],16) .  base2dec($K,16));
 
 //$result["B"] = $_SESSION["B"];
 //$result["u"] = $u;
@@ -310,6 +318,20 @@ error_log("credentialCheck");
 //$result["K"] = $K;
 //$result["M1"] = $M1;
 //$result["_M1"] = $parameters["parameters"]["M1"];
+ 
+// error_log("credentialCheck calculated: ". $M1);
+// error_log("credentialCheck S: ". $S);
+// error_log("credentialCheck A: ". $A);
+// error_log("credentialCheck B: ". $_SESSION["B"]);
+// error_log("credentialCheck base2dec: ". base2dec($_SESSION["B"],16));
+// error_log("credentialCheck K: ". base2dec($K,16));
+// error_log("credentialCheck n: ". $srp_n);
+// error_log("credentialCheck u: ". $u);
+// error_log("credentialCheck v: ". base2dec($_SESSION['v'],16));
+// error_log("credentialCheck expected: ". $parameters["parameters"]["M1"]);
+
+
+//User -> Host:  M = H(H(N) xor H(g), H(I), s, A, B, K)
 
 				if ($M1 == $parameters["parameters"]["M1"]) {
 					$_SESSION["K"] = $K;

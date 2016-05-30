@@ -138,8 +138,10 @@ Clipperz.Crypto.SRP.Connection.prototype = MochiKit.Base.update(null, {
 
 	'a': function () {
 		if (this._a == null) {
-			this._a = new Clipperz.Crypto.BigInt(Clipperz.Crypto.PRNG.defaultRandomGenerator().getRandomBytes(32).toHexString().substring(2), 16);
-//			this._a = new Clipperz.Crypto.BigInt("37532428169486597638072888476611365392249575518156687476805936694442691012367", 10);
+//			this._a = new Clipperz.Crypto.BigInt(Clipperz.Crypto.PRNG.defaultRandomGenerator().getRandomBytes(32).toHexString().substring(2), 16);
+			// Due to the problem with BigInt not handling signed numbers, this must be even. 
+			// Possible generate any number, then bitwise shift right then left.
+			this._a = new Clipperz.Crypto.BigInt("33361134861037855263467252772741875431812790785257651194773534061185325245730", 10);
 		}
 		
 		return this._a;
@@ -191,7 +193,8 @@ Clipperz.Crypto.SRP.Connection.prototype = MochiKit.Base.update(null, {
 
 	'x': function () {
 		if (this._x == null) {
-			this._x = new Clipperz.Crypto.BigInt(this.stringHash(this.s().asString(16, 64) + this.P()), 16);
+			// Private key x = H(s, p)
+			this._x = new Clipperz.Crypto.BigInt(this.stringHash(this.s() + this.P()), 16);
 		}
 		
 		return this._x;
@@ -210,6 +213,7 @@ Clipperz.Crypto.SRP.Connection.prototype = MochiKit.Base.update(null, {
 	//-------------------------------------------------------------------------
 
 	'S': function () {
+	 // S = (B - kg^x) ^ (a + ux)
 		if (this._S == null) {
 			var bigint;
 			var	srp;
@@ -217,17 +221,8 @@ Clipperz.Crypto.SRP.Connection.prototype = MochiKit.Base.update(null, {
 			bigint = Clipperz.Crypto.BigInt;
 			srp = 	 Clipperz.Crypto.SRP;
 
-			this._S =	bigint.powerModule(
-							bigint.subtract(
-								this.B(),
-								bigint.multiply(
-									Clipperz.Crypto.SRP.k(),
-									bigint.powerModule(srp.g(), this.x(), srp.n())
-								)
-							),
-							bigint.add(this.a(), bigint.multiply(this.u(), this.x())),
-							srp.n()
-						)
+			this._S =	bigint.powerModule( bigint.subtract( bigint.multiply(Clipperz.Crypto.SRP.k(),bigint.powerModule(srp.g(), this.x(), srp.n())), this.B()), bigint.add(this.a(), bigint.multiply(this.u(), this.x())),srp.n() );
+			  
 		}
 		
 		return this._S;
@@ -258,9 +253,25 @@ Clipperz.Crypto.SRP.Connection.prototype = MochiKit.Base.update(null, {
 				this.s().asString() +
 				this.A().asString() +
 				this.B().asString() +
-				this.K()
+				new Clipperz.Crypto.BigInt(this.K(),16).asString()
 			);
 //console.log("M1", this._M1);
+//console.log("g", this.g().asString());
+//console.log("s", this.s().asString());
+//console.log("a", this.a().asString());
+//console.log("A", this.A().asString());
+//console.log("B", this.B().asString());
+//console.log("S", this.S().asString());
+//console.log("k", Clipperz.Crypto.SRP.k().asString());
+//console.log("K", this.K());
+//console.log("x", this.x().asString());
+//console.log("P", this.P());
+//console.log("u", this.u());
+//console.log("u", this.u().asString());
+//console.log("Test", this.stringHash(this.A().asString));
+//console.log("N", Clipperz.Crypto.SRP.n().asString());
+//console.log("g", Clipperz.Crypto.SRP.g().asString());
+//console.log("test", this.A().asString() + this.B().asString());
 		}
 		
 		return this._M1;
@@ -283,15 +294,22 @@ Clipperz.Crypto.SRP.Connection.prototype = MochiKit.Base.update(null, {
 		var result;
 		var s, x, v;
 		
-		s = aSalt;
+//`		s = aSalt;
+		s = new Clipperz.Crypto.BigInt(aSalt,16);
+		x = this.stringHash(s.asString() + this.P());
 		x = this.stringHash(s + this.P());
 		v = Clipperz.Crypto.SRP.g().powerModule(new Clipperz.Crypto.BigInt(x, 16), Clipperz.Crypto.SRP.n());
 
 		result = {};
 		result['C'] = this.C();
-		result['s'] = s;
+		result['s'] = s.asString(16);
 		result['v'] = v.asString(16);
 		
+//console.log("ServerSide C", result['C']);
+//console.log("ServerSide s", result['s']);
+//console.log("ServerSide v", result['v']);
+//console.log("ServerSide P", this.P());
+//console.log("ServerSide x", ge.asString());
 		return result;
 	},
 	
@@ -334,8 +352,9 @@ Clipperz.Crypto.SRP.Connection.prototype = MochiKit.Base.update(null, {
 	'stringHash': function(aValue) {
 		var	result;
 
-		result = this.hash(new Clipperz.ByteArray(aValue)).toHexString().substring(2);
-		
+		//result = this.hash(new Clipperz.ByteArray(aValue)).toHexString().substring(2);
+		result = Clipperz.Crypto.SHA.sha256( new Clipperz.ByteArray(aValue)).toHexString().substring(2);
+
 		return result;
 	},
 	
