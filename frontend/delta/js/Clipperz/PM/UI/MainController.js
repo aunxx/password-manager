@@ -1265,10 +1265,10 @@ Clipperz.log("THE BROWSER IS OFFLINE");
 				'certificateQuota'
 			];
 			
+			var	attributes = this.user().accountInfo()._attributes;
 //
 //		Disable loading of the details of the account. Hard code similar to the python frontend
 //
-//			var	attributes = this.user().accountInfo()._attributes;
 //			MochiKit.Iter.forEach(usefulFields, function (aFieldName) {
 //				result[aFieldName] = attributes[aFieldName];
 //			})
