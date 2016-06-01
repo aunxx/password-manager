@@ -33,7 +33,8 @@ Clipperz.PM.DataModel.Record = function(args) {
 	Clipperz.PM.DataModel.Record.superclass.constructor.apply(this, arguments);
 
 	this._updateDate				= (args.updateDate ? Clipperz.PM.Date.parse(args.updateDate) : Clipperz.Base.exception.raise('MandatoryParameter'));
-	this._accessDate				= (args.accessDate ? Clipperz.PM.Date.parse(args.accessDate) : Clipperz.Base.exception.raise('MandatoryParameter'));
+//	Disabled due to invalid data and the raised exception
+//	this._accessDate				= (args.accessDate ? Clipperz.PM.Date.parse(args.accessDate) : Clipperz.Base.exception.raise('MandatoryParameter'));
 
 	this._retrieveIndexDataFunction	= args.retrieveIndexDataFunction	|| Clipperz.Base.exception.raise('MandatoryParameter');
 	this._updateIndexDataFunction	= args.updateIndexDataFunction		|| Clipperz.Base.exception.raise('MandatoryParameter');
