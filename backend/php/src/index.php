@@ -107,8 +107,8 @@ function digits($base) {
 //-----------------------------------------------------------------------------
 
 function clipperz_hash($value) {
-	//return hash("sha256", hash("sha256", $value, true));
-	return hash("sha256", $value, false);
+	return hash("sha256", hash("sha256", $value, true));
+	//return hash("sha256", $value, false);
 }
 
 //-----------------------------------------------------------------------------
@@ -295,6 +295,7 @@ error_log("handshake");
 //				$_SESSION["b"] = "5761e6c84d22ea3c5649de01702d60f674ccfe79238540eb34c61cd020230c53";
 				$_SESSION["b"] = "23309839184091712110293815740584558132927982490099443826709662564655631314481";
 
+				// B = kv + g^b
 				$_SESSION["B"] = dec2base(bcmod( bcadd( bcmod( bcmul( $srp_k,  base2dec($_SESSION["v"], 16)), $srp_n), bcpowmod( $srp_g, $_SESSION["b"], $srp_n) ), $srp_n), 16);
 
 				$result["s"] = $_SESSION["s"];
