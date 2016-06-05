@@ -67,9 +67,14 @@ MochiKit.Base.update(Clipperz.Crypto.SRP, {
 	},
 
 	'k': function() {
+	//k = H(N, g) 
 		if (Clipperz.Crypto.SRP._k == null) {
 //			Clipperz.Crypto.SRP._k = new Clipperz.Crypto.BigInt(this.stringHash(this.n().asString() + this.g().asString()), 16);
-			Clipperz.Crypto.SRP._k = new Clipperz.Crypto.BigInt("64398bff522814e306a97cb9bfc4364b7eed16a8c17c5208a40a2bad2933c8e", 16);
+			// This is a fixed hash derived from  a hash of N and G
+			// Following hash for just AES256
+		//	Clipperz.Crypto.SRP._k = new Clipperz.Crypto.BigInt("64398bff522814e306a97cb9bfc4364b7eed16a8c17c5208a40a2bad2933c8e", 16);
+			// Following hash for dual  AES256
+			Clipperz.Crypto.SRP._k = new Clipperz.Crypto.BigInt("23059873679103356965010473015094804246238452944122574891019568752064785140295", 10);
 		}
 		
 		return Clipperz.Crypto.SRP._k;
@@ -221,10 +226,43 @@ Clipperz.Crypto.SRP.Connection.prototype = MochiKit.Base.update(null, {
 			bigint = Clipperz.Crypto.BigInt;
 			srp = 	 Clipperz.Crypto.SRP;
 
+			// S can be negative. This breaks as the BigInt Library is unsigned
 			this._S =	bigint.powerModule( bigint.subtract( bigint.multiply(Clipperz.Crypto.SRP.k(),bigint.powerModule(srp.g(), this.x(), srp.n())), this.B()), bigint.add(this.a(), bigint.multiply(this.u(), this.x())),srp.n() );
 			  
+
+			var tmp_B = new BigInteger(this.B());
+                        var tmp_k = new BigInteger(Clipperz.Crypto.SRP.k());
+                        var tmp_g = new BigInteger(srp.g());
+                        var tmp_x = new BigInteger(this.x());
+                        var tmp_a = new BigInteger(this.a());
+                        var tmp_n = new BigInteger(srp.n());
+                        var tmp_u = new BigInteger(this.u());
+
+			var tmp_S1 = new BigInteger(tmp_B.subtract(tmp_k.multiply(tmp_g.modPow(tmp_x,tmp_n))));
+                        var tmp_S2 = new BigInteger(tmp_a.add(tmp_u.multiply(tmp_x)));
+                        var tmp_S = new BigInteger(tmp_S1.modPow(tmp_S2,tmp_n));
+
+			if (tmp_S.isNegative() == true ) {
+                            tmp_S = tmp_S.add(srp.n());
+                        }
+
+//console.log("_B", tmp_B.toString());
+//console.log("_k", tmp_k.toString());
+//console.log("_g", tmp_g.toString());
+//console.log("_x", tmp_x.toString());
+//console.log("_a", tmp_a.toString());
+//console.log("_n", tmp_n.toString());
+//console.log("_u", tmp_u.toString());
+
+//console.log("S1", tmp_S1.toString());
+//console.log("S2", tmp_S2.toString());
+//console.log("S-", tmp_S.toString());
+
+
+
 		}
 		
+		//this._S= Clipperz.Crypto.BigInt(tmp_S.toString(),10);
 		return this._S;
 	},
 
@@ -353,7 +391,8 @@ Clipperz.Crypto.SRP.Connection.prototype = MochiKit.Base.update(null, {
 		var	result;
 
 		//result = this.hash(new Clipperz.ByteArray(aValue)).toHexString().substring(2);
-		result = Clipperz.Crypto.SHA.sha256( new Clipperz.ByteArray(aValue)).toHexString().substring(2);
+		//result = Clipperz.Crypto.SHA.sha256( new Clipperz.ByteArray(aValue)).toHexString().substring(2);
+		result = Clipperz.Crypto.SHA.sha_d256( new Clipperz.ByteArray(aValue)).toHexString().substring(2);
 
 		return result;
 	},
