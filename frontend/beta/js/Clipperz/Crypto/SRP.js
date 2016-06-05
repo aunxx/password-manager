@@ -230,21 +230,21 @@ Clipperz.Crypto.SRP.Connection.prototype = MochiKit.Base.update(null, {
 			this._S =	bigint.powerModule( bigint.subtract( bigint.multiply(Clipperz.Crypto.SRP.k(),bigint.powerModule(srp.g(), this.x(), srp.n())), this.B()), bigint.add(this.a(), bigint.multiply(this.u(), this.x())),srp.n() );
 			  
 
-			var tmp_B = new BigInteger(this.B());
-                        var tmp_k = new BigInteger(Clipperz.Crypto.SRP.k());
-                        var tmp_g = new BigInteger(srp.g());
-                        var tmp_x = new BigInteger(this.x());
-                        var tmp_a = new BigInteger(this.a());
-                        var tmp_n = new BigInteger(srp.n());
-                        var tmp_u = new BigInteger(this.u());
+//			var tmp_B = new BigInteger(this.B());
+//                        var tmp_k = new BigInteger(Clipperz.Crypto.SRP.k());
+//                        var tmp_g = new BigInteger(srp.g());
+//                        var tmp_x = new BigInteger(this.x());
+//                        var tmp_a = new BigInteger(this.a());
+//                        var tmp_n = new BigInteger(srp.n());
+//                        var tmp_u = new BigInteger(this.u());
+//
+//			var tmp_S1 = new BigInteger(tmp_B.subtract(tmp_k.multiply(tmp_g.modPow(tmp_x,tmp_n))));
+//                        var tmp_S2 = new BigInteger(tmp_a.add(tmp_u.multiply(tmp_x)));
+//                        var tmp_S = new BigInteger(tmp_S1.modPow(tmp_S2,tmp_n));
 
-			var tmp_S1 = new BigInteger(tmp_B.subtract(tmp_k.multiply(tmp_g.modPow(tmp_x,tmp_n))));
-                        var tmp_S2 = new BigInteger(tmp_a.add(tmp_u.multiply(tmp_x)));
-                        var tmp_S = new BigInteger(tmp_S1.modPow(tmp_S2,tmp_n));
-
-			if (tmp_S.isNegative() == true ) {
-                            tmp_S = tmp_S.add(srp.n());
-                        }
+//			if (tmp_S.isNegative() == true ) {
+//                            tmp_S = tmp_S.add(srp.n());
+//                        }
 
 //console.log("_B", tmp_B.toString());
 //console.log("_k", tmp_k.toString());

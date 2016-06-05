@@ -80,7 +80,6 @@
 		"Clipperz/Crypto/AES_2.js",
 		"Clipperz/Crypto/PRNG.js",
 		"Clipperz/Crypto/BigInt.js",
-		"Clipperz/Crypto/biginteger.js",
 		"Clipperz/Crypto/Base.js",
 		"Clipperz/Crypto/SRP.js",
 		"Clipperz/Crypto/RSA.js",
