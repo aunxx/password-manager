@@ -409,7 +409,11 @@ error_log("message");
 						$recordStats["updateDate"] = $record->update_date;
 						$recordsStats[$record->reference] = $recordStats;
 					}
-					$result["recordsStats"] = $recordsStats;
+					if ( isset( $recordsStats ) ) {
+						$result["recordsStats"] = $recordsStats;
+					} else {
+						$result["recordsStats"] = NULL;
+					}
 
 					$result["statistics"] =	$user->statistics;
 					$result["version"] =	$user->version;
