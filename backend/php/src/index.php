@@ -543,7 +543,11 @@ error_log("message");
 
 					$user->Save();
 
-					$recordToDeleteReferenceList = $parameters["parameters"]["records"]["deleted"];
+					if (isset( $parameters["parameters"]["records"]["deleted"] ) ) {
+						$recordToDeleteReferenceList = $parameters["parameters"]["records"]["deleted"];
+					} else {
+						$recordToDeleteReferenceList = NULL;
+					}
 					$recordList = array();
 					$c = count($recordToDeleteReferenceList);
 					for ($i=0; $i<$c; $i++) {
