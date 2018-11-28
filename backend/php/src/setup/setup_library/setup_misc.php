@@ -276,10 +276,10 @@
 	{
 		$link = '';
 		$content = file_get_contents($objectFilePath);
-		$contentParts = split("<b>",$content);
+		$contentParts = explode("<b>",$content);
 		if (isset($contentParts[1]))
 		{
-			$contentParts2 = split("</b>",$contentParts[1]);
+			$contentParts2 = explode("</b>",$contentParts[1]);
 		}
 		if (isset($contentParts2[0]))
 		{
@@ -287,8 +287,8 @@
 		}
 		if (isset($className))
 		{
-			$linkParts1 = split("\*\/", $contentParts[1]);
-			$linkParts2 = split("\@link", $linkParts1[0]);
+			$linkParts1 = explode("\*\/", $contentParts[1]);
+			$linkParts2 = explode("\@link", $linkParts1[0]);
 			if (isset($linkParts2[1]))
 			{
 				$link = $linkParts2[1];
@@ -313,10 +313,10 @@
 	function GetObjectName($objectFilePath)
 	{
 		$content = file_get_contents($objectFilePath);
-		$contentParts = split("<b>",$content);
+		$contentParts = explode("<b>",$content);
 		if (isset($contentParts[1]))
 		{
-			$contentParts2 = split("</b>",$contentParts[1]);
+			$contentParts2 = explode("</b>",$contentParts[1]);
 		}
 		if (isset($contentParts2[0]))
 		{
@@ -593,10 +593,10 @@
 
 		//extract sql
 		$content = file_get_contents($objectFilePath);
-		$contentParts = split("<b>",$content);
+		$contentParts = explode("<b>",$content);
 		if (isset($contentParts[1]))
 		{
-			$contentParts2 = split("</b>",$contentParts[1]);
+			$contentParts2 = explode("</b>",$contentParts[1]);
 		}
 		if (isset($contentParts2[0]))
 		{
@@ -604,8 +604,8 @@
 		}
 		if (isset($className))
 		{
-			$sqlParts = split(";",$contentParts[0]);
-			$sqlPart = split("CREATE",$sqlParts[0]);
+			$sqlParts = explode(";",$contentParts[0]);
+			$sqlPart = explode("CREATE",$sqlParts[0]);
 			$sql = "CREATE ".$sqlPart[1].";";
 
 			//execute sql

@@ -354,7 +354,8 @@ Clipperz.PM.Proxy.Offline.DataStore.prototype = MochiKit.Base.update(null, {
 			this.set_C(someParameters.parameters.C);
 			this.set_b(new Clipperz.Crypto.BigInt(randomBytes, 16));
 			v = new Clipperz.Crypto.BigInt(this.userData()['v'], 16);
-			this.set_B((Clipperz.Crypto.SRP.k().multiply(v)).add(Clipperz.Crypto.SRP.g().powerModule(this.b(), Clipperz.Crypto.SRP.n())));
+			//this.set_B((Clipperz.Crypto.SRP.k().multiply(v)).add(Clipperz.Crypto.SRP.g().powerModule(this.b(), Clipperz.Crypto.SRP.n())));
+			this.set_B((Clipperz.Crypto.SRP.k().multiply(v)).add(Clipperz.Crypto.SRP.g().powerModule(this.b(), Clipperz.Crypto.SRP.n())).module(Clipperz.Crypto.SRP.n()));
 			
 			this.set_A(someParameters.parameters.A);
 			
@@ -363,7 +364,7 @@ Clipperz.PM.Proxy.Offline.DataStore.prototype = MochiKit.Base.update(null, {
 			
 			nextTollRequestType = 'CONNECT';
 		} else if (someParameters.message == "credentialCheck") {
-			var v, u, s, S, A, K, M1;
+			var v, u, s, S, A, K, M1, KK;
 			var stringHash = function (aValue) {
 				return Clipperz.PM.Crypto.encryptingFunctions.versions[someParameters.version].hash(new Clipperz.ByteArray(aValue)).toHexString().substring(2);
 			};
@@ -373,9 +374,11 @@ Clipperz.PM.Proxy.Offline.DataStore.prototype = MochiKit.Base.update(null, {
 			A = new Clipperz.Crypto.BigInt(this.A(), 16);
 			u = new Clipperz.Crypto.BigInt(Clipperz.PM.Crypto.encryptingFunctions.versions[someParameters.version].hash(new Clipperz.ByteArray(A.asString(10) + this.B().asString(10))).toHexString(), 16);
 			s = new Clipperz.Crypto.BigInt(this.userData()['s'], 16);
-			S = (A.multiply(v.powerModule(u, Clipperz.Crypto.SRP.n()))).powerModule(this.b(), Clipperz.Crypto.SRP.n());
+			//S = (A.multiply(v.powerModule(u, Clipperz.Crypto.SRP.n()))).powerModule(this.b(), Clipperz.Crypto.SRP.n());
+			S = v.powerModule(u, Clipperz.Crypto.SRP.n()).multiply(A).module(Clipperz.Crypto.SRP.n()).powerModule(this.b(), Clipperz.Crypto.SRP.n())
 
 			K = stringHash(S.asString(10));
+			KK = new Clipperz.Crypto.BigInt(K,16);
 
 			M1 = stringHash(
 				"597626870978286801440197562148588907434001483655788865609375806439877501869636875571920406529" +
@@ -383,7 +386,7 @@ Clipperz.PM.Proxy.Offline.DataStore.prototype = MochiKit.Base.update(null, {
 				s.asString(10) +
 				A.asString(10) +
 				this.B().asString(10) +
-				K
+				KK.asString(10)
 			);
 			if (someParameters.parameters.M1 == M1) {
 				var M2;

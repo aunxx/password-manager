@@ -17,17 +17,10 @@
 		$databaseUser = $GLOBALS['configuration']['user'];
 		$databasePassword = $GLOBALS['configuration']['pass'];
 		$databasePort = $GLOBALS['configuration']['port'];
-		$this->connection = mysql_connect ($serverName.":".$databasePort, $databaseUser, $databasePassword);
-		if ($this->connection)
+		$this->connection = mysqli_connect ($serverName, $databaseUser, $databasePassword , $databaseName, $databasePort);
+		if (!$this->connection)
 		{
-			if (!mysql_select_db ($databaseName))
-			{
-				throw new Exception('I cannot find the specified database "'.$databaseName.'". Please edit configuration.php.');
-			}
-		}
-		else
-		{
-			throw new Exception('I cannot connect to the database. Please edit configuration.php with your database configuration.');
+			throw new Exception('I cannot find the specified database "'.$databaseName.'". Please edit configuration.php.');
 		}
 	}
 
@@ -43,19 +36,19 @@
 
 	public static function Reader($query, $connection)
 	{
-		$cursor = mysql_query($query, $connection);
+		$cursor = mysqli_query($connection, $query);
 		return $cursor;
 	}
 
 	public static function Read($cursor)
 	{
-		return mysql_fetch_assoc($cursor);
+		return mysqli_fetch_assoc($cursor);
 	}
 
 	public static function NonQuery($query, $connection)
 	{
-		mysql_query($query, $connection);
-		$result = mysql_affected_rows($connection);
+		mysqli_query($connection, $query);
+		$result = mysqli_affected_rows($connection);
 		if ($result == -1)
 		{
 			return false;
@@ -66,14 +59,14 @@
 
 	public static function Query($query, $connection)
 	{
-		$result = mysql_query($query, $connection);
-		return mysql_num_rows($result);
+		$result = mysqli_query($connection, $query);
+		return mysqli_num_rows($result);
 	}
 
 	public static function InsertOrUpdate($query, $connection)
 	{
-		$result = mysql_query($query, $connection);
-		return intval(mysql_insert_id($connection));
+		$result = mysqli_query($connection, $query);
+		return intval(mysqli_insert_id($connection));
 	}
 }
 ?>

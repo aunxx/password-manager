@@ -11,7 +11,22 @@ header('Content-Disposition: attachment; filename=Clipperz_'.date("Ymd").'.html'
 	include "./objects/class.onetimepassword.php";
 	include "./objects/class.onetimepasswordstatus.php";
 
-	$htmlContent = file_get_contents("../index.html");
+	//$htmlContent = file_get_contents("../index.html");
+	switch ($_GET["frontend"]) {
+                case 'beta':
+                        $htmlContent = file_get_contents("beta/index.html");
+                        break;
+                case 'gamma':
+                        $htmlContent = file_get_contents("gamma/index.html");
+                        break;
+                case 'delta':
+                        $htmlContent = file_get_contents("delta/index.html");
+                        break;
+                default:
+                        exit ("Invalid Frontend");
+
+        }
+
 
 	session_start();
 

@@ -1268,9 +1268,32 @@ Clipperz.log("THE BROWSER IS OFFLINE");
 			];
 			
 			var	attributes = this.user().accountInfo()._attributes;
-			MochiKit.Iter.forEach(usefulFields, function (aFieldName) {
-				result[aFieldName] = attributes[aFieldName];
-			})
+//
+//		Disable loading of the details of the account. Hard code similar to the python frontend
+//
+//			MochiKit.Iter.forEach(usefulFields, function (aFieldName) {
+//				result[aFieldName] = attributes[aFieldName];
+//			})
+
+		result['currentSubscriptionType'] = 'EARLY_ADOPTER' ;
+                                result['expirationDate'] = 'Mon, 01 January 4001 00:00:00 UTC' ;
+                                result['referenceDate'] =  'Fri, 03 April 2015 08:17:46 UTC' ;
+                                result['featureSet'] = 'FULL' ;
+                                result['features'] = ['UPDATE_CREDENTIALS',
+                				'EDIT_CARD',
+                				'CARD_DETAILS',
+                				'REGISTER_CARD',
+                				'ADD_CARD',
+                				'DELETE_CARD',
+                				'OFFLINE_COPY',
+                				'LIST_CARDS'];
+                                result['isExpired'] = false ;
+                                result['isExpiring'] = false ;
+                                result['paymentVerificationPending'] = false ;
+                                result['attachmentQuota'] = 100 ;
+                                result['certificateQuota'] = 100 ;
+
+
 		};
 		
 		return result;

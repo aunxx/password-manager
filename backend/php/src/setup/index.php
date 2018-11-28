@@ -164,24 +164,26 @@ if(count($_POST) > 0 && $_SESSION['diagnosticsSuccessful']==false)
 		if ($errors == 0)
 		{
 			AddTrace('File Structure....OK!');
-			if (!mysql_connect ($GLOBALS['configuration']['host'].":".$GLOBALS['configuration']['port'], $GLOBALS['configuration']['user'], $GLOBALS['configuration']['pass']))
+			#if (!mysql_connect ($GLOBALS['configuration']['host'].":".$GLOBALS['configuration']['port'], $GLOBALS['configuration']['user'], $GLOBALS['configuration']['pass']))
+			if (!mysqli_connect ($GLOBALS['configuration']['host'], $GLOBALS['configuration']['user'], $GLOBALS['configuration']['pass'],$GLOBALS['configuration']['db'], $GLOBALS['configuration']['port']))
 			{
 				$errors++;
 				AddError('Cannot connect to the specified database server. Edit configuration.php');
+				AddError('Cannot find the specified database "'.$GLOBALS['configuration']['db'].'". Edit configuration.php');
 			}
 			if (isset($GLOBALS['configuration']['db_encoding']) && $GLOBALS['configuration']['db_encoding'] == 1 && !Base64::IsBase64FunctionInstalled())
 			{
 				$errors++;
 				AddError('$configuration[db_encoding] needs to be set to 0 until you install the base64 plugin. Set db_encoding to 0 by editing configuration.php, run setup again and go to the "Manage Plugins" tab. Install the base64 plugin. Then you can set db_encoding = 1');
 			}
-			if ($errors == 0)
-			{
-				if (!@mysql_select_db ($GLOBALS['configuration']['db']))
-				{
-					$errors++;
-					AddError('Cannot find the specified database "'.$GLOBALS['configuration']['db'].'". Edit configuration.php');
-				}
-			}
+#			if ($errors == 0)
+#			{
+#				if (!@mysql_select_db ($GLOBALS['configuration']['db']))
+#				{
+#					$errors++;
+#					AddError('Cannot find the specified database "'.$GLOBALS['configuration']['db'].'". Edit configuration.php');
+#				}
+#			}
 		}
 
 		/**

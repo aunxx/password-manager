@@ -92,10 +92,10 @@ class POG_Base
 		return $objectList;
 	}
 
-	private function CreateObjects($mysql_result, $objectClass, $lazyLoad = true)
+	private function CreateObjects($mysqli_result, $objectClass, $lazyLoad = true)
 	{
 		$objectList = array();
-		while ($row = mysql_fetch_assoc($mysql_result))
+		while ($row = mysqli_fetch_assoc($mysqli_result))
 		{
 			$pog_object = new $objectClass();
 			$this->PopulateObjectAttributes($row, $pog_object);
