@@ -1,5 +1,5 @@
 {
 	"request.path": "../index.php",
-	"dump.path": "../dump.php",
+	"dump.path": "/../dump.php?frontend=",
 	"should.pay.toll": "false"
 }
