@@ -127,7 +127,7 @@ class record extends POG_Base
 			$this->version = $this->Unescape($row['version']);
 			$this->creation_date = $row['creation_date'];
 			$oDate = strtotime($row['update_date']);
-			$this->update_date = date('r', $oDate);
+			$this->update_date = date('Y-m-d H:i:s', $oDate);
 			$this->access_date = $row['access_date'];
 		}
 		return $this;
@@ -220,7 +220,7 @@ class record extends POG_Base
 			$record->version = $this->Unescape($row['version']);
 			$record->creation_date = $row['creation_date'];
 			$oDate = strtotime($row['update_date']);
-			$record->update_date = date('r', $oDate);
+			$record->update_date = date('Y-m-d H:i:s', $oDate);
 			$record->access_date = $row['access_date'];
 			$recordList[] = $record;
 		}
@@ -235,8 +235,8 @@ class record extends POG_Base
 	function Save($deep = true)
 	{
 		$connection = Database::Connect();
-		$this->update_date = date( 'r');
-		$this->access_date = date( 'r');
+		$this->update_date = date( 'Y-m-d H:i:s');
+		$this->access_date = date( 'Y-m-d H:i:s');
 		$this->pog_query = "select `recordid` from `record` where `recordid`='".$this->recordId."' LIMIT 1";
 		$rows = Database::Query($this->pog_query, $connection);
 		if ($rows > 0)
