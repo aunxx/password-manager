@@ -111,7 +111,7 @@ class recordversion extends POG_Base
 		}
 	}
 	
-	function recordversion($reference='', $header='', $data='', $version='', $previous_version_key='', $previous_version_id='', $creation_date='', $update_date='', $access_date='')
+	function recordversion($reference='', $header='', $data='', $version='', $previous_version_key='', $previous_version_id='0', $creation_date='', $update_date='', $access_date='')
 	{
 		$this->reference = $reference;
 		$this->header = $header;
@@ -119,7 +119,7 @@ class recordversion extends POG_Base
 		$this->version = $version;
 		$this->previous_version_key = $previous_version_key;
 		$this->previous_version_id = $previous_version_id;
-		$this->creation_date = $creation_date;
+		$this->creation_date = date( 'Y-m-d H:i:s');
 		$this->update_date = $update_date;
 		$this->access_date = $access_date;
 	}
