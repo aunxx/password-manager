@@ -89,7 +89,7 @@ def build (settings, repository):
 	
 	if repository.areTherePendingChanges():
 		if 'install' in settings['versions']:
-#			print "\nWARNING: repository has pending changes\n"
+#			print ( "\nWARNING: repository has pending changes\n" )
 			raise Exception("repository has pending changes, can't 'install'")
 		else:
 			print ( "\nWARNING: repository has pending changes\n" )
