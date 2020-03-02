@@ -53,7 +53,7 @@ class FrontendBuilder(object):
 		module = self.module
 		if (self.module != self.submodule):
 			module = module + "." + self.submodule
-		print "frontend [" + module + "]: " + message
+		print ( "frontend [" + module + "]: " + message )
 	
 
 	def absolutePathForSources (self):
@@ -117,7 +117,7 @@ class FrontendBuilder(object):
 			try:
 				fileHandler = codecs.open(self.absolutePathForSourceFile(basePath, file), 'r', 'utf-8')
 			except:
-				print "FILE: " + file
+				print ( "FILE: " + file )
 
 			result[file] = fileHandler.read()
 			fileHandler.close()
@@ -197,7 +197,7 @@ class FrontendBuilder(object):
 		
 		    # output rule if it contains any declarations
 		    if properties:
-		        print "%s{%s}" % ( ','.join( selectors ), ''.join(['%s:%s;' % (key, properties[key]) for key in porder])[:-1] )
+		        print ( "%s{%s}" % ( ','.join( selectors ), ''.join(['%s:%s;' % (key, properties[key]) for key in porder])[:-1] ) )
 		
 		return css
 
