@@ -30,7 +30,7 @@ class DeltaBuilder(FrontendBuilder):
 			content = content.replace('@request.path@',			backendSettings['request.path'])
 
 			dst = self.absolutePathForTargetFile(targetFolder, '', resource['target'])
-			file = open(dst, 'w')
+			file = open(dst, 'wb')
 			file.write(content.encode('utf-8'))
 			file.close()
 

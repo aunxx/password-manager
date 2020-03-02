@@ -6,7 +6,7 @@ import cssmin
 import jsmin
 import codecs
 import shutil
-import StringIO
+from io import StringIO
 import urllib
 
 import main
@@ -146,7 +146,7 @@ class FrontendBuilder(object):
 
 	def template (self):
 		processedFile = 'html_template'
-		if not self.processedFiles.has_key(processedFile):
+		if processedFile not in self.processedFiles:
 		#	self.processedFiles[processedFile] = self.loadFilesContent('html', ['index_template.html'])
 			self.processedFiles[processedFile] = self.loadFilesContent('html', [self.settings['html.template']])
 			
@@ -218,8 +218,8 @@ class FrontendBuilder(object):
 
 	def compressJS_jsmin (self, js, description):
 		self.log("compressing " + description + " code")
-		original = StringIO.StringIO(js)
-		output = StringIO.StringIO()
+		original = StringIO(js)
+		output = StringIO()
 		
 		jsMinifier = jsmin.JavascriptMinify()
 		jsMinifier.minify(original, output)
@@ -287,7 +287,8 @@ class FrontendBuilder(object):
 
 	def bookmarklet (self):
 		cacheKey = 'bookmarklet'
-		if not self.processedFiles.has_key(cacheKey):
+#		if not self.processedFiles.has_key(cacheKey):
+		if 'bookmarklet' not in self.processedFiles:
 			result = 'bookmarklet="' + self.packBookmarklet(self.loadFilesContent('js', ['Bookmarklet.js']), "regular") + '";bookmarklet_ie="' + self.packBookmarklet(self.loadFilesContent('js', ['Bookmarklet_IE.js']), "IE") + '";'
 			self.processedFiles[cacheKey] = result
 		else:
@@ -316,7 +317,8 @@ class FrontendBuilder(object):
 
 	def assembleCopyrightHeader (self):
 		processedFile = 'copyright'
-		if not self.processedFiles.has_key(processedFile):
+#		if not self.processedFiles.has_key(processedFile):
+		if 'copyright' not in self.processedFiles:
 			#self.log("assembling copyright header")
 			copyrightValues = self.settings['copyright.values']
 			license = self.loadFilesContent('../../properties', ['license.txt'])
@@ -351,7 +353,8 @@ class FrontendBuilder(object):
 
 	def assembleVersion (self, pageTitle, copyright, css, js, jsLoadMode, version, versionType):
 		cacheKey = version + "-" + versionType
-		if not self.processedFiles.has_key(cacheKey):
+#		if not self.processedFiles.has_key(cacheKey):
+		if cacheKey not in self.processedFiles:
 			result = self.replaceTemplatePlaceholders(pageTitle, copyright, css, js, jsLoadMode, version, versionType)
 			self.processedFiles[cacheKey] = result
 		else:

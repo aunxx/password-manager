@@ -7,7 +7,7 @@ import hashlib
 
 from functools import reduce
 from operator import add
-from itertools import izip
+#from itertools import izip
 
 import main
 
@@ -63,7 +63,7 @@ class BackendBuilder(object):
 	# --------------------------------------------------------------------------
 	
 	def writeToFolder (self, folder, filename, content):
-		file = open(os.path.join(folder, filename), 'w')
+		file = open(os.path.join(folder, filename), 'wb')
 		file.write(content.encode('utf-8'))
 		file.close()
 		
@@ -81,19 +81,19 @@ class BackendBuilder(object):
 
 	def formatMAC (self, value):
 		x = iter(value)
-		return ' '.join([reduce(add, tup) for tup in izip(x, x, x, x)])
+		return ' '.join([reduce(add, tup) for tup in zip(x, x, x, x)])
 
 
 	def logChecksums (self, content, message):
 		md5Digest		= self.formatMAC(hashlib.md5(content.encode('utf-8')).hexdigest())
 		shaDigest		= self.formatMAC(hashlib.sha1(content.encode('utf-8')).hexdigest())
 		sha256Digest	= self.formatMAC(hashlib.sha256(content.encode('utf-8')).hexdigest())
-		print "-----"
-		print message + ": " + md5Digest + " (md5)"
-		print message + ": " + shaDigest + " (sha1)"
-		print message + ": " + sha256Digest + " (sha256)"
-		print "file size: " + "{:,}".format(len(content))
-		print "====="
+		print ( "-----" )
+		print ( message + ": " + md5Digest + " (md5)" )
+		print ( message + ": " + shaDigest + " (sha1)" )
+		print ( message + ": " + sha256Digest + " (sha256)" )
+		print ( "file size: " + "{:,}".format(len(content)) )
+		print ( "=====" )
 		
 	
 	def shouldCompileCode (self):
@@ -101,7 +101,7 @@ class BackendBuilder(object):
 
 
 	def run (self):
-		print self.name() + " - RUN"
+		print ( self.name() + " - RUN" )
 
 		if self.shouldCompileCode():
 			self.compileCode()
