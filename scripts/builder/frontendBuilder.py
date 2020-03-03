@@ -288,7 +288,7 @@ class FrontendBuilder(object):
 	def bookmarklet (self):
 		cacheKey = 'bookmarklet'
 #		if not self.processedFiles.has_key(cacheKey):
-		if 'bookmarklet' not in self.processedFiles:
+		if cacheKey not in self.processedFiles:
 			result = 'bookmarklet="' + self.packBookmarklet(self.loadFilesContent('js', ['Bookmarklet.js']), "regular") + '";bookmarklet_ie="' + self.packBookmarklet(self.loadFilesContent('js', ['Bookmarklet_IE.js']), "IE") + '";'
 			self.processedFiles[cacheKey] = result
 		else:
@@ -318,7 +318,7 @@ class FrontendBuilder(object):
 	def assembleCopyrightHeader (self):
 		processedFile = 'copyright'
 #		if not self.processedFiles.has_key(processedFile):
-		if 'copyright' not in self.processedFiles:
+		if processedFile not in self.processedFiles:
 			#self.log("assembling copyright header")
 			copyrightValues = self.settings['copyright.values']
 			license = self.loadFilesContent('../../properties', ['license.txt'])
