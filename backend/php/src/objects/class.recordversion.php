@@ -111,7 +111,7 @@ class recordversion extends POG_Base
 		}
 	}
 	
-	function recordversion($reference='', $header='', $data='', $version='', $previous_version_key='', $previous_version_id='0', $creation_date='', $update_date='', $access_date='')
+	function __construct($reference='', $header='', $data='', $version='', $previous_version_key='', $previous_version_id='0', $creation_date='', $update_date='', $access_date='')
 	{
 		$this->reference = $reference;
 		$this->header = $header;
