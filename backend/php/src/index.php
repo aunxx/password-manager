@@ -223,11 +223,13 @@ function arrayContainsValue($array, $value) {
 	
 	$method = $_POST['method'];
 
-	if (get_magic_quotes_gpc()) {
-		$parameters = json_decode(stripslashes($_POST['parameters']), true);
-	} else {
-		$parameters = json_decode($_POST['parameters'], true);
-	}
+	// get_magic_quotes_gpc depricated
+	//if (get_magic_quotes_gpc()) {
+	//	$parameters = json_decode(stripslashes($_POST['parameters']), true);
+	//} else {
+	//	$parameters = json_decode($_POST['parameters'], true);
+	//}
+	$parameters = json_decode($_POST['parameters'], true);
 
 	$parameters = $parameters["parameters"];
 
