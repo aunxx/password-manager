@@ -68,7 +68,7 @@ class onetimepasswordstatus extends POG_Base
 		}
 	}
 	
-	function onetimepasswordstatus($code='', $name='', $description='')
+	function __construct($code='', $name='', $description='')
 	{
 		$this->_onetimepasswordList = array();
 		$this->code = $code;
