@@ -276,6 +276,11 @@ class recordversion extends POG_Base
 		}
 		else
 		{
+			// error checking - make sure that recordId is defined. Required by DB constraints
+			if ( $this->recordId == "")
+			{
+				throw new Exception('Unset recordId"'.$this->recordId.'".');
+			}
 			$this->pog_query = "insert into `recordversion` (`recordid`, `reference`, `header`, `data`, `version`, `previous_version_key`, `previous_version_id`, `creation_date`, `update_date`, `access_date` ) values (
 			'".$this->recordId."', 
 			'".$this->Escape($this->reference)."', 
