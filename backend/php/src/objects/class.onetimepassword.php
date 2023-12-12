@@ -110,7 +110,7 @@ class onetimepassword extends POG_Base
 		}
 	}
 	
-	function onetimepassword($reference='', $key='', $key_checksum='', $data='', $version='', $creation_date='', $request_date='', $usage_date='')
+	function __construct($reference='', $key='', $key_checksum='', $data='', $version='', $creation_date='', $request_date='', $usage_date='')
 	{
 		$this->reference = $reference;
 		$this->key = $key;

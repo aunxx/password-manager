@@ -223,11 +223,13 @@ function arrayContainsValue($array, $value) {
 	
 	$method = $_POST['method'];
 
-	if (get_magic_quotes_gpc()) {
-		$parameters = json_decode(stripslashes($_POST['parameters']), true);
-	} else {
-		$parameters = json_decode($_POST['parameters'], true);
-	}
+	// get_magic_quotes_gpc depricated
+	//if (get_magic_quotes_gpc()) {
+	//	$parameters = json_decode(stripslashes($_POST['parameters']), true);
+	//} else {
+	//	$parameters = json_decode($_POST['parameters'], true);
+	//}
+	$parameters = json_decode($_POST['parameters'], true);
 
 	$parameters = $parameters["parameters"];
 
@@ -534,11 +536,18 @@ error_log("message");
 						updateRecordData($recordToUpdateParameterList[$i], $currentRecord, $currentVersion);
 
 						if ($isNewRecord == true) {
+							// update userId in record
+							$user->AddRecord($currentRecord);
+
+							// Save record to get recordId
 							$currentRecord->SaveNew();
+
+							// update recordId in recordversion
+							$currentRecord->AddRecordversion($currentVersion);
+
+							// And save the recordversion
 							$currentVersion->SaveNew();
 
-							$currentRecord->AddRecordversion($currentVersion);
-							$user->AddRecord($currentRecord);
 						}
 
 						$currentRecord->Save();

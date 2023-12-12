@@ -17,7 +17,7 @@ class POG_Base
 	 *
 	 * @return POG_Base
 	 */
-	private function POG_Base()
+	private function __construct()
 	{
 	}
 

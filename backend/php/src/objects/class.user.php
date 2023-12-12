@@ -109,7 +109,7 @@ class user extends POG_Base
 		}
 	}
 	
-	function user($username='', $srp_s='', $srp_v='', $header='', $statistics='', $auth_version='', $version='', $lock='')
+	function __construct($username='', $srp_s='', $srp_v='', $header='', $statistics='', $auth_version='', $version='', $lock='')
 	{
 		$this->username = $username;
 		$this->srp_s = $srp_s;
