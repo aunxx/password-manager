@@ -252,6 +252,11 @@ class record extends POG_Base
 		}
 		else
 		{
+			// Check to ansure that the userId has been defined -- constraint on the database
+			if ( $this->userId == "")
+			{
+				throw new Exception('Unset userId"'.$this->userId.'".');
+			}
 			$this->pog_query = "insert into `record` (`userid`, `reference`, `data`, `version`, `creation_date`, `update_date`, `access_date` ) values (
 			'".$this->userId."', 
 			'".$this->Escape($this->reference)."', 
