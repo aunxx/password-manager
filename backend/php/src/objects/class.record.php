@@ -96,7 +96,7 @@ class record extends POG_Base
 		}
 	}
 	
-	function record($reference='', $data='', $version='', $creation_date='', $update_date='', $access_date='')
+	function __construct($reference='', $data='', $version='', $creation_date='', $update_date='', $access_date='')
 	{
 		$this->_recordversionList = array();
 		$this->reference = $reference;
