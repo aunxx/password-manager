@@ -536,11 +536,18 @@ error_log("message");
 						updateRecordData($recordToUpdateParameterList[$i], $currentRecord, $currentVersion);
 
 						if ($isNewRecord == true) {
+							// update userId in record
+							$user->AddRecord($currentRecord);
+
+							// Save record to get recordId
 							$currentRecord->SaveNew();
+
+							// update recordId in recordversion
+							$currentRecord->AddRecordversion($currentVersion);
+
+							// And save the recordversion
 							$currentVersion->SaveNew();
 
-							$currentRecord->AddRecordversion($currentVersion);
-							$user->AddRecord($currentRecord);
 						}
 
 						$currentRecord->Save();
