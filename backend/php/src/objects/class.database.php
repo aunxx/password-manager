@@ -66,6 +66,11 @@
 	public static function InsertOrUpdate($query, $connection)
 	{
 		$result = mysqli_query($connection, $query);
+                if ($result == false)
+                {
+                        throw new Exception('Database InsertOrUpdate failed: query was: "'.$query.'".');
+                }
+
 		return intval(mysqli_insert_id($connection));
 	}
 }
