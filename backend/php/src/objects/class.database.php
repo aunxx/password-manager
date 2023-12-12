@@ -10,7 +10,7 @@
 {
 	public $connection;
 
-	private function Database()
+	private function __construct()	
 	{
 		$databaseName = $GLOBALS['configuration']['db'];
 		$serverName = $GLOBALS['configuration']['host'];
